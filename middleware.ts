@@ -1,9 +1,9 @@
 import { NextResponse, NextRequest } from "next/server";
+import { KindeRequestPathname } from "@/modules/kinde/utility/request-pathname";
 
 export function middleware(request: NextRequest) {
-  const pathname = request.nextUrl.pathname;
   const response = NextResponse.next();
-  response.headers.set("x-req-pathname", pathname);
+  KindeRequestPathname.set(request, response);
 
   return response;
 }
@@ -11,7 +11,7 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     // Match all pathnames except for
-    // - … if they start with `/api`, `/_next`
+    // - … if they start with `/_next`, `/_vercel`
     // - … the ones containing a dot (e.g. `favicon.ico`)
     "/((?!_next|_vercel|.*\\..*).*)",
   ],
